@@ -1,2 +1,5 @@
 *.cmi
 *.cmo
+_build/
+bin/
+bin/
