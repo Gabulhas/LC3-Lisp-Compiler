@@ -1,9 +1,5 @@
-(*TODO remove modules from module files*)
 open Lib
-module CodeGeneration =
-    struct
 
-    end
 
 
 let load_file f =
@@ -21,7 +17,10 @@ let () =
         in
         let parsed = Lib.Parser.tokenize loadedFile in
         let lexed = Lib.Lexer.read_from_tokens parsed in
-        Lexer.printTree lexed
+        Lexer.printTree lexed;
+        let resultLines = Lib.CodeGeneration.generate_code lexed in
+        print_int (List.length resultLines)
+
 
     end
 

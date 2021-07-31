@@ -7,6 +7,11 @@ let atom_to_string = function
                     | LString a -> Printf.sprintf "[STRING:%s]" a
                     | Boolean a -> Printf.sprintf "[BOOL:%s]" (if a then "T" else "F")
 
+let rec printTree tree = 
+    match tree with
+    | Atom a -> Printf.printf "%s" (atom_to_string a)
+    | LList a -> Printf.printf "\n(";List.iter printTree a; print_char ')'
+
 let find_atom_type token = 
     match token with
         | "T" -> Boolean true
@@ -16,14 +21,9 @@ let find_atom_type token =
                match optionValue with
                | None -> Symbol token
                | Some number -> Number number
+
 let atomize token  = 
     Atom (find_atom_type token)
-
-
-let rec printTree tree = 
-    match tree with
-    | Atom a -> Printf.printf "%s" (atom_to_string a)
-    | LList a -> Printf.printf "\n(";List.iter printTree a; print_char ')'
 
 
 (* Hello? Is this from the garbage department?

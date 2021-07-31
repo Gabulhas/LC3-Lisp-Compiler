@@ -1,10 +1,10 @@
-# dune exec ./lc3_compiler.exe sample/simple.lcl
+# dune exec ./lc3_compiler.exe sample/random_stuff.lcl
 # OCAMLPARAM: unset
 # Workspace root: /home/guilherme/Projetos/lc3_stuff/compiler
-$ /usr/bin/nproc > /tmp/dunea38873.output 2> /dev/null
+$ /usr/bin/nproc > /tmp/dune5f6cc7.output 2> /dev/null
 # Auto-detected concurrency: 12
 # disable binary cache
-$ /usr/bin/ocamlc.opt -config > /tmp/dune41726e.output
+$ /usr/bin/ocamlc.opt -config > /tmp/duneb8e291.output
 # Dune context:
 #  { name = "default"
 #  ; kind = "default"
