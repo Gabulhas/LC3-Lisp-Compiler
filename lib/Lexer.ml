@@ -25,7 +25,6 @@ let find_atom_type token =
 let atomize token  = 
     Atom (find_atom_type token)
 
-
 (* Hello? Is this from the garbage department?
    Fix this omg
 
@@ -39,6 +38,7 @@ let atomize token  =
             if it finds a rparen while not looking for it, then it's Unexpected EOF
             for example: `Print)`
  *)
+
 let read_from_tokens t =
     let rec aux tokens result lpared_look= 
         match tokens with
