@@ -11,5 +11,7 @@ Compiles Lisp to LC3 Assembly Code, using my own [LC3 Assembler](https://github.
     - [] Strings
     
 - [] Scoping
+- [] 
 - [] Heap
+- [] type check
 - [] Garbage Collection
