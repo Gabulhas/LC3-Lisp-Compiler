@@ -1,18 +1,13 @@
-type atom = Number of int | Symbol of string | LString of string | Boolean of bool
-type sexpression = Atom of atom | LList of sexpression list
+type sexpression = Number of int | Symbol of string | LString of string | Boolean of bool | LList of sexpression list
 
-let atom_to_string = function 
-                    | Number a -> Printf.sprintf "[NUMBER:%d]" a
-                    | Symbol a -> Printf.sprintf "[SYMBOL:%s]" a
-                    | LString a -> Printf.sprintf "[STRING:%s]" a
-                    | Boolean a -> Printf.sprintf "[BOOL:%s]" (if a then "T" else "F")
+let rec print_sexpression = function 
+                    | Number a -> Printf.printf "[NUMBER:%d]" a
+                    | Symbol a -> Printf.printf "[SYMBOL:%s]" a
+                    | LString a -> Printf.printf "[STRING:%s]" a
+                    | Boolean a -> Printf.printf "[BOOL:%s]" (if a then "T" else "F")
+                    | LList a -> Printf.printf "\n(";List.iter print_sexpression a; print_char ')'
 
-let rec printTree tree = 
-    match tree with
-    | Atom a -> Printf.printf "%s" (atom_to_string a)
-    | LList a -> Printf.printf "\n(";List.iter printTree a; print_char ')'
-
-let find_atom_type token = 
+let atomize token = 
     match token with
         | "T" -> Boolean true
         | "F" -> Boolean false
@@ -22,8 +17,6 @@ let find_atom_type token =
                | None -> Symbol token
                | Some number -> Number number
 
-let atomize token  = 
-    Atom (find_atom_type token)
 
 (* Hello? Is this from the garbage department?
    Fix this omg

@@ -22,11 +22,6 @@ When a C function is called under this model, the function's parameters are push
 
 
 *)
-
-
-
-
-
 let r0:reg = "R0" 
 let r1:reg = "R1"
 let r2:reg = "R2"
