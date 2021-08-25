@@ -5,14 +5,14 @@ open Assembly
 
 let stack_push_subroutine = 
     label "STACK_PUSH"          ++ 
-    addi r6 r6 (to_imm 1)       ++
+    addi r6 r6 (to_imm (-1))       ++
     str r0 r6 (to_imm 0)        ++
     ret                          
 
 let stack_pull_subroutine = 
     label "STACK_PULL"          ++ 
     ldr r0 r6 (to_imm 0)        ++
-    addi r6 r6 (to_imm (-1))    ++ 
+    addi r6 r6 (to_imm 1)    ++ 
     ret                         
 
 

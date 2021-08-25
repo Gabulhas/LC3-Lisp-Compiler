@@ -2,14 +2,26 @@ open Assembly
 open BuiltinSubroutines
 open Lexer
 
+
+
+(*Sets origin
+  loads bottom of the stack to r6 and r5
+  bottom of the stack is at the bottom of the user space memory (65023 or 0xFDFF)
+
+
+*)
 let initial_code:asm = (*.ORIG x3000*)
     orig 12288           ++ 
-    lea r6 "STACK"       
+    ld r6 "STACK_BOTTOM"++
+    ld r5 "STACK_BOTTOM"++
+    brnzp "MAIN"         ++
+    label "STACK_BOTTOM" ++
+    fill 65023
 
 
+(*TODO: remove this *)
 let final_code =
     join_asm_lines [stack_pull_subroutine; stack_push_subroutine] ++
-    label "STACK"                                      ++
     endd
 
 let emit_functions =
@@ -126,6 +138,7 @@ and symbol_generate sym arguments=
 let generation_pipeline ast = 
     initial_code                       ++
     emit_functions                     ++
+    label "MAIN"                       ++
 
     from_ast ast                       ++
     halt                               ++
