@@ -7,3 +7,8 @@ let load_file f =
   (Bytes.unsafe_to_string s)
 
 
+let list_fill filler ammount =
+    let rec aux amm result =
+        if amm == 0 then result
+        else aux (amm -1) (filler::result)
+    in aux ammount []

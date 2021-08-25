@@ -1,4 +1,8 @@
-type sexpression = Number of int | Symbol of string | LString of string | Boolean of bool | LList of sexpression list
+type sexpression = Number of int 
+                 | Symbol of string 
+                 | LString of string 
+                 | Boolean of bool 
+                 | LList of sexpression list
 
 let rec print_sexpression = function 
                     | Number a -> Printf.printf "[NUMBER:%d]" a
@@ -6,6 +10,13 @@ let rec print_sexpression = function
                     | LString a -> Printf.printf "[STRING:%s]" a
                     | Boolean a -> Printf.printf "[BOOL:%s]" (if a then "T" else "F")
                     | LList a -> Printf.printf "\n(";List.iter print_sexpression a; print_char ')'
+
+
+let get_symbol s =
+    match s with
+    | Symbol s -> Some s
+    | _ -> None
+
 
 let atomize token = 
     match token with
@@ -30,7 +41,7 @@ let atomize token =
             for example: `(Print`
             if it finds a rparen while not looking for it, then it's Unexpected EOF
             for example: `Print)`
- *)
+*)
 
 let read_from_tokens t =
     let rec aux tokens result lpared_look= 
@@ -50,3 +61,5 @@ let read_from_tokens t =
     let (_, result, _) = aux t [] 0 in
     result
 
+
+let boolean_to_int a = if a then 1 else 0
