@@ -12,23 +12,28 @@ open Lexer
 *)
 let initial_code:asm = (*.ORIG x3000*)
     orig 12288           ++ 
-    ld r6 "STACK_BOTTOM"++
-    ld r5 "STACK_BOTTOM"++
-    brnzp "MAIN"         ++
-    label "STACK_BOTTOM" ++
+    comment "Register Initialization" ++
+    ld r6 "STACK_BOTTOM_POINTER"++
+    ld r5 "STACK_BOTTOM_POINTER" ++
+    ld r4 "GLOBAL_DATA_POINTER" ++
+    brnzp "MAIN"                ++
+
+    comment "Pointers" ++
+    label "GLOBAL_DATA_POINTER" ++
+    fill_label "GLOBAL_DATA"     ++
+    label "STACK_BOTTOM_POINTER"++
     fill 65023
 
 
 (*TODO: remove this *)
 let final_code =
-    join_asm_lines [stack_pull_subroutine; stack_push_subroutine] ++
+    comment "Stack Manipulation"                       ++
+    join_asm_lines 
+        [stack_pull_subroutine; stack_push_subroutine] ++
+
+    comment "Global Data Start"                        ++
+    label "GLOBAL_DATA"                                 ++                                                  
     endd
-
-let emit_functions =
-    "\n;--FUNCTIONS--\n"
-
-
-
 
 (*
     How to deal with this recursive mess (☉_☉)?
@@ -75,7 +80,6 @@ and subtr_func arguments=
         Utils.list_fill (jsr "SUBTR_FUNC") ((List.length arguments) - 1)
         |> join_asm_lines
     )
-
 and mull_func arguments=
     let pre_add = 
         List.map (from_ast) arguments
@@ -137,7 +141,6 @@ and symbol_generate sym arguments=
 
 let generation_pipeline ast = 
     initial_code                       ++
-    emit_functions                     ++
     label "MAIN"                       ++
 
     from_ast ast                       ++

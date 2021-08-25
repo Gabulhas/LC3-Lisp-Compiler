@@ -4,6 +4,8 @@ type imm = string
 let to_imm (value:int): imm= 
     "#"^(string_of_int value)
 
+
+
 let imm_to_asm (a:imm) :asm = a
 let join_asm = String.concat " "
 let join_asm_lines = String.concat "\n"
@@ -15,10 +17,10 @@ type reg = string
 
 (*
 
-R4 is used as a base register for loading and storing global data
-R5 is used to point to the current function's area on the call stack
-R6 is used as a stack pointer.
-R7 is usually reserved for storage of return addresses from function calls; the JSR, JSRR, and TRAP instructions automatically store return addresses in this register during their execution.
+R4 - Global (Data) Pointer
+R5 - Frame Pointer
+R6 - Stack Pointer
+R7 - Return Pointer
 
 When a C function is called under this model, the function's parameters are pushed onto the stack right to left. Space is then made on the stack for the return value of the function being called, the address of the instruction in the caller to return to, and the caller's value of R5. Local variables in the function being called are pushed onto the stack in the order that they are declared. Note that the LC-3 does not have native PUSH and POP instructions, so addition and memory storage instructions must be used separately to implement the stack.
 
@@ -122,10 +124,15 @@ let label a :asm = a
 let orig a :asm = join_asm [".ORIG"; to_imm a]
 let endd :asm = ".END"
 let fill a :asm = join_asm [".FILL"; to_imm a]
+let fill_label label :asm = join_asm [".FILL"; label]
 let blkw a :asm = join_asm [".BLKW"; to_imm a]
 let stringz a :asm = join_asm [".STRINGZ"; "\"" ^ a ^ "\""]
 
 (*Extras*)
+let comment comm =
+    Printf.sprintf ";--%s--" comm
+
+
 let copy source destination =
     addi destination source (to_imm 0)
 

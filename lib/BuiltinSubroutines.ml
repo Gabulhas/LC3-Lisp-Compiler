@@ -70,6 +70,7 @@ TODO:
     result is in the stack
 *)
 let add_routine =
+    comment "--ADD_FUNC_START--"++
     label "ADD_FUNC"            ++
     save_ret                    ++
     stack_pull                  ++
@@ -77,10 +78,12 @@ let add_routine =
     stack_pull                  ++
     addr r0 r1 r0               ++
     stack_push                  ++
-    restore_ret                  ++
-    ret
+    restore_ret                 ++
+    ret                         ++
+    comment "--ADD_FUNC_END--"  
 
 let subtr_routine =
+    comment "--SUBTR_FUNC_START--"  ++
     label "SUBTR_FUNC"          ++
     save_ret                    ++
     stack_pull                  ++
@@ -90,10 +93,12 @@ let subtr_routine =
     addr r0 r1 r0               ++
     stack_push                  ++
     restore_ret                 ++
-    ret
+    ret                         ++
+    comment "--SUBTR_FUNC_END--" 
 
 
 let multiply_routine =
+    comment "--MUL_FUNC_START--"  ++
     label "MUL_FUNC"            ++
     save_ret                    ++
     stack_pull                  ++
@@ -111,10 +116,12 @@ let multiply_routine =
     stack_push                  ++
 
     restore_ret                 ++
-    ret 
+    ret                         ++
+    comment "--MUL_FUNC_END--"  
 
 
 let divide_routine =
+    comment "--DIV_FUNC_START--"++
     label "DIV_FUNC"            ++
     save_ret                    ++
 
@@ -134,10 +141,12 @@ let divide_routine =
     label "DIV_FUNC_LOOP_END"   ++
     stack_push                  ++
     restore_ret                 ++
-    ret 
+    ret                         ++
+    comment "--DIV_FUNC_END--"  
 
 let modulo_routine =
-    label "MODULO_FUNC"            ++
+    comment "--MODULO_FUNC_START--"++
+    label "MODULO_FUNC"         ++
     save_ret                    ++
 
     stack_pull                  ++
@@ -154,7 +163,8 @@ let modulo_routine =
     copy r1 r0                  ++
     stack_push                  ++
     restore_ret                 ++
-    ret 
+    ret                         ++ 
+    comment "--MODULO_FUNC_END--"  
 
 
 let all_subroutines =
