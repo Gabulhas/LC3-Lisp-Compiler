@@ -1,17 +1,53 @@
-# Lisp to LC3 Virtual Machine
-Compiles Lisp to LC3 Assembly Code, using my own [LC3 Assembler](https://github.com/Gabulhas/Garbage-LC3-Assembler).
+# LC3 Lisp Compiler
 
-# TODO
-- [] Code generation
-    - [] Arithmetic 
-    - [] IO 
-    - [] Flow Control 
-    - [] Lists
-    - [] Type Check
-    - [] Strings
+Compiles a Lisp-like language to LC3 Assembly.
+
+Uses my own assembler ([LC3 Assembler](https://github.com/Gabulhas/Garbage-LC3-Assembler)) to assemble to machine code.
+
+
+## Roadmap
+
+- Code generation
+    - ~~Arithmetic~~
+    -  IO 
+    -  Flow Control 
+    -  Lists
+    -  Type Check
+    -  Strings
     
-- [] Scoping
-- [] 
-- [] Heap
-- [] type check
-- [] Garbage Collection
+-  Scoping
+-  Heap
+
+-  Garbage Collection
+
+## TODO
+- Remove `to_imm` function
+- Improve concatenation of blocks of routines (basically remove `join_asm_lines`)
+- Find a way to load subroutines from afar
+- replace repeated instructions with loops  (on add function, where `Utils.list_fill` is used)
+- remove zeroing of register
+
+
+  
+## Features
+
+- Lisp Parsing
+- Lexing
+- Basic Arithmetic (`+ - / * %`)
+
+
+  
+## Related
+
+Related Projects (also inspiration):
+
+[C to LC3 compiler](https://github.com/nickodell/lc3-cc)
+
+  
+## Acknowledgements
+
+ - [Compiler Design Lectures](http://www.di.ubi.pt/~desousa/DLPC/dlpc.html)
+ - [LC3 Specification](https://justinmeiners.github.io/lc3-vm/supplies/lc3-isa.pdf)
+ - [Compiling a Lisp](https://bernsteinbear.com/blog/compiling-a-lisp-0/)
+
+  
