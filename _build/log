@@ -1,10 +1,10 @@
 # dune utop
 # OCAMLPARAM: unset
 # Workspace root: /home/guilherme/Projetos/lc3_stuff/compiler
-$ /usr/bin/nproc > /tmp/dunead8137.output 2> /dev/null
+$ /usr/bin/nproc > /tmp/dune06f705.output 2> /dev/null
 # Auto-detected concurrency: 12
 # disable binary cache
-$ /usr/bin/ocamlc.opt -config > /tmp/dune4175e2.output
+$ /usr/bin/ocamlc.opt -config > /tmp/dune672bd6.output
 # Dune context:
 #  { name = "default"
 #  ; kind = "default"

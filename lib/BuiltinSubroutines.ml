@@ -89,7 +89,7 @@ let subtr_routine =
     negativate r0               ++ 
     addr r0 r1 r0               ++
     stack_push                  ++
-    restore_ret                  ++
+    restore_ret                 ++
     ret
 
 
@@ -103,9 +103,9 @@ let multiply_routine =
     zero r0                     ++
 
     label "MUL_FUNC_LOOP"       ++
-    addr r0 r0 r2               ++
-    addi r1 r1 (to_imm (-1))    ++
-    brp "MUL_FUNC_LOOP"         ++
+        addr r0 r0 r2           ++
+        addi r1 r1 (to_imm (-1))++
+        brp "MUL_FUNC_LOOP"     ++
 
 
     stack_push                  ++
@@ -113,9 +113,55 @@ let multiply_routine =
     restore_ret                 ++
     ret 
 
+
+let divide_routine =
+    label "DIV_FUNC"            ++
+    save_ret                    ++
+
+    stack_pull                  ++
+    copy r0 r1                  ++
+    stack_pull                  ++
+    copy r0 r2                  ++
+    zero r0                     ++
+    negativate r2               ++
+
+    label "DIV_FUNC_LOOP"       ++
+        addr r1 r1 r2           ++
+        brn "DIV_FUNC_LOOP_END" ++ 
+        addi r0 r0 (to_imm 1)   ++
+        brp "DIV_FUNC_LOOP"     ++
+
+    label "DIV_FUNC_LOOP_END"   ++
+    stack_push                  ++
+    restore_ret                 ++
+    ret 
+
+let modulo_routine =
+    label "MODULO_FUNC"            ++
+    save_ret                    ++
+
+    stack_pull                  ++
+    copy r0 r1                  ++
+    stack_pull                  ++
+    negativate r0               ++
+
+    label "MODULO_FUNC_LOOP"    ++
+        addr r1 r1 r0           ++
+        brp "MODULO_FUNC_LOOP"  ++
+
+    negativate r0               ++
+    addr r1 r1 r0               ++
+    copy r1 r0                  ++
+    stack_push                  ++
+    restore_ret                 ++
+    ret 
+
+
 let all_subroutines =
     multiply_routine            ++ 
     add_routine                 ++
-    subtr_routine
+    subtr_routine               ++
+    divide_routine              ++
+    modulo_routine
 
 

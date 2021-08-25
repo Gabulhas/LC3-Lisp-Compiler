@@ -75,13 +75,47 @@ and mull_func arguments=
         |> join_asm_lines
     )
 
+and div_func arguments = 
+    let pre_sub = 
+        List.map (from_ast) (List.tl arguments)
+        |> join_asm_lines
+
+    in
+    let first_value =
+        from_ast (List.hd arguments)
+    in
+
+    (join_asm_lines [pre_sub; first_value])     ++
+
+    (
+        Utils.list_fill (jsr "DIV_FUNC") ((List.length arguments) - 1)
+        |> join_asm_lines
+    )
+
+and modulo_func arguments = 
+    let pre_sub = 
+        List.map (from_ast) (List.tl arguments)
+        |> join_asm_lines
+
+    in
+    let first_value =
+        from_ast (List.hd arguments)
+    in
+
+    (join_asm_lines [pre_sub; first_value])     ++
+
+    (
+        Utils.list_fill (jsr "MODULO_FUNC") ((List.length arguments) - 1)
+        |> join_asm_lines
+    )
+
 and symbol_generate sym arguments=
     match sym with
     | "+" -> add_func arguments
     | "-" -> subtr_func arguments 
-    | "*" -> mull_func  arguments
-    | "/" -> ""
-    | "%" -> ""
+    | "*" -> mull_func arguments
+    | "/" -> div_func arguments
+    | "%" -> modulo_func arguments
     | "define" -> ""
     | "print" -> ""
     | _ -> ""
