@@ -12,3 +12,13 @@ let list_fill filler ammount =
         if amm == 0 then result
         else aux (amm -1) (filler::result)
     in aux ammount []
+
+
+let current_label = ref 0;;
+
+let next_label = 
+    fun () ->
+      current_label := (!current_label) + 1;
+      "LBL_" ^ (string_of_int (!current_label));;
+    
+

@@ -18,7 +18,7 @@ type reg = string
 (*
 
 R4 - Global (Data) Pointer
-R5 - Frame Pointer
+R5 - Frame Pointer (Scope Pointer)
 R6 - Stack Pointer
 R7 - Return Pointer
 
@@ -30,10 +30,10 @@ let r0:reg = "R0"
 let r1:reg = "R1"
 let r2:reg = "R2"
 let r3:reg = "R3"
-let r4:reg = "R4" (*Base register for loading and storing global data*)
-let r5:reg = "R5" (*Points to current function call memory*)
-let r6:reg = "R6" (*Stack Pointer register*)
-let r7:reg = "R7" (*Return Value register*)
+let r4:reg = "R4"
+let r5:reg = "R5"
+let r6:reg = "R6"
+let r7:reg = "R7"
 
 
 

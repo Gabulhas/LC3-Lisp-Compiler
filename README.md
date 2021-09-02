@@ -21,15 +21,12 @@ Uses my own assembler ([LC3 Assembler](https://github.com/Gabulhas/Garbage-LC3-A
 -  Garbage Collection
 
 ## TODO
-- Remove `to_imm` function
-- Improve concatenation of blocks of routines (basically remove `join_asm_lines`)
-- Find a way to load subroutines from afar
-- replace repeated instructions with loops  (on add function, where `Utils.list_fill` is used)
-- remove zeroing of register
+Check ([TODO.md](/TODO.md))
+
 
 
   
-## Features
+## Features (so far)
 
 - Lisp Parsing
 - Lexing

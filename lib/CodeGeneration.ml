@@ -37,8 +37,8 @@ let final_code =
 
 (*
     How to deal with this recursive mess (☉_☉)?
-
-
+    it would be better if these functions were declared somewhere else, but
+    they must be recursive to recall the `from_ast` function recursively
  *)
 let rec from_ast ast =
     match ast with

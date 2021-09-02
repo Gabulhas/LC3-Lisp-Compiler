@@ -1,0 +1,3 @@
+(define a (read_int))
+(define b (read_int))
+(print_int (+ a b))
