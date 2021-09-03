@@ -1,6 +1,6 @@
 # LC3 Lisp Compiler
 
-Compiles a Lisp-like language to LC3 Assembly.
+Compiles a **Garbage-flavoured** lisp to LC3 Assembly.
 
 Uses my own assembler ([LC3 Assembler](https://github.com/Gabulhas/Garbage-LC3-Assembler)) to assemble to machine code.
 

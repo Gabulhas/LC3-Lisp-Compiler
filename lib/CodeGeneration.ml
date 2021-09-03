@@ -132,6 +132,7 @@ and symbol_generate sym arguments=
     | "*" -> mull_func arguments
     | "/" -> div_func arguments
     | "%" -> modulo_func arguments
+
     | "define" -> ""
     | "print" -> ""
     | _ -> ""

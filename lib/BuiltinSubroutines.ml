@@ -5,7 +5,7 @@ open Assembly
 
 let stack_push_subroutine = 
     label "STACK_PUSH"          ++ 
-    addi r6 r6 (to_imm (-1))       ++
+    addi r6 r6 (to_imm (-1))      ++
     str r0 r6 (to_imm 0)        ++
     ret                          
 
@@ -15,6 +15,12 @@ let stack_pull_subroutine =
     addi r6 r6 (to_imm 1)    ++ 
     ret                         
 
+
+let inc_stack_pointer =
+    addi r6 r6 (to_imm 1)
+
+let dec_stack_pointer =
+    addi r6 r6 (to_imm (-1))
 
 let stack_push = 
     jsr "STACK_PUSH"
@@ -27,11 +33,17 @@ let push_value value =
     stack_push                  
 
 
-let save_ret =
-    copy r7 r5
 
-let restore_ret = 
-    copy r5 r7
+(*THIS IS WRONG!!!*)
+
+let save_ret =
+    addi r6 r6 (to_imm (-1))    ++
+    str r7 r6 (to_imm 0)       
+
+let return_val =
+    ldr r7 r6 (to_imm 0)        ++
+    str r0 r6 (to_imm 0)        ++
+    ret
 (*
 
 REMEMBER!!!!
@@ -69,6 +81,7 @@ TODO:
     adds r0 and r1
     result is in the stack
 *)
+
 let add_routine =
     comment "--ADD_FUNC_START--"++
     label "ADD_FUNC"            ++
@@ -77,9 +90,7 @@ let add_routine =
     copy r0 r1                  ++
     stack_pull                  ++
     addr r0 r1 r0               ++
-    stack_push                  ++
-    restore_ret                 ++
-    ret                         ++
+    return_val                  ++
     comment "--ADD_FUNC_END--"  
 
 let subtr_routine =
@@ -90,10 +101,7 @@ let subtr_routine =
     copy r0 r1                  ++
     stack_pull                  ++
     negativate r0               ++ 
-    addr r0 r1 r0               ++
-    stack_push                  ++
-    restore_ret                 ++
-    ret                         ++
+    return_val                  ++
     comment "--SUBTR_FUNC_END--" 
 
 
@@ -112,11 +120,7 @@ let multiply_routine =
         addi r1 r1 (to_imm (-1))++
         brp "MUL_FUNC_LOOP"     ++
 
-
-    stack_push                  ++
-
-    restore_ret                 ++
-    ret                         ++
+    return_val                  ++
     comment "--MUL_FUNC_END--"  
 
 
@@ -139,9 +143,7 @@ let divide_routine =
         brp "DIV_FUNC_LOOP"     ++
 
     label "DIV_FUNC_LOOP_END"   ++
-    stack_push                  ++
-    restore_ret                 ++
-    ret                         ++
+    return_val                  ++
     comment "--DIV_FUNC_END--"  
 
 let modulo_routine =
@@ -161,10 +163,17 @@ let modulo_routine =
     negativate r0               ++
     addr r1 r1 r0               ++
     copy r1 r0                  ++
-    stack_push                  ++
-    restore_ret                 ++
-    ret                         ++ 
+    return_val                  ++
     comment "--MODULO_FUNC_END--"  
+
+
+
+(* 
+   Since 
+   (< 7 8 1) is equivalent to (> 1 8 7) then we only need a greater than function
+
+    let smaller = 
+*)
 
 
 let all_subroutines =
