@@ -140,9 +140,12 @@ let zero register =
     andi register register (to_imm 0)
 
 let negate register =
-    "\n"                                ++
     not register register               ++ 
     addi register register (to_imm 1)
+
+let set_val register value =
+    zero register               ++
+    addi register register value
 
 
 let load_big_value value register = 

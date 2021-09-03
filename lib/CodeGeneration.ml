@@ -125,6 +125,19 @@ and modulo_func arguments =
         |> join_asm_lines
     )
 
+
+and compare_func arguments is_smaller is_equal =
+    let n_to_compare = List.length arguments in
+    let pre_eval = 
+        List.map (from_ast) arguments
+        |> join_asm_lines
+    in
+    pre_eval ++
+    set_val r0 (to_imm is_smaller)   ++
+    set_val r1 (to_imm is_equal)     ++
+    set_val r3 (to_imm n_to_compare) ++
+    jsr "COMPARE_START"
+
 and symbol_generate sym arguments=
     match sym with
     | "+" -> add_func arguments
@@ -132,12 +145,16 @@ and symbol_generate sym arguments=
     | "*" -> mull_func arguments
     | "/" -> div_func arguments
     | "%" -> modulo_func arguments
-
+    | ">" -> compare_func (List.rev arguments) 1 0
+    | ">=" -> compare_func (List.rev arguments) 1 1
+    | "<" -> compare_func arguments 1 0
+    | "<=" -> compare_func arguments 1 1
+    | "=" -> compare_func arguments 0 1
     | "define" -> ""
     | "print" -> ""
     | _ -> ""
 
-    
+
 
 
 let generation_pipeline ast = 
