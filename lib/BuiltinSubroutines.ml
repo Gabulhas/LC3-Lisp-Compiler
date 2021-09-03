@@ -119,7 +119,6 @@ let subtr_routine =
 let multiply_routine =
     comment "--MUL_FUNC_START--"        ++
     label "MUL_FUNC"                    ++
-    save_ret                            ++
     stack_pull_into r1                  ++
     stack_pull_into r2                  ++
     zero r0                             ++
