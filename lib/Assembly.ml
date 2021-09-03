@@ -139,7 +139,7 @@ let copy source destination =
 let zero register =
     andi register register (to_imm 0)
 
-let negativate register =
+let negate register =
     "\n"                                ++
     not register register               ++ 
     addi register register (to_imm 1)
