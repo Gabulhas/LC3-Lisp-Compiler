@@ -208,7 +208,7 @@ let modulo_routine =
     Arguments:
     R0 - > flag
     R1 - = flag
-    R3 - Values to Compare
+    R3 - Values to Compare - 1
 
 
     During Execution:
@@ -231,40 +231,41 @@ let modulo_routine =
 let compare_routine = 
     
     let storage = 
-        label  "R7_SAVE"   ++ fill 0 ++
-        label  "FLAG_SAVE" ++ fill 0 ++
-        label  "N_MASK"    ++ fill 63487 ++
+        label  "R7_SAVE"   ++ fill 0    ++
+        label  "FLAG_SAVE" ++ fill 0    ++
+        label  "N_MASK"    ++ fill 63487++
+        label  "P_MASK"    ++ fill 65023++
         label  "Z_MASK"    ++ fill 64511 
 
     in
     let compare_start = 
-        label "COMPARE_START"++
-        st r7 "R7_SAVE" ++
-        jsr "CHANGE_FLAG" ++
-        jsr "ALL_TO_ZERO" ++
-        label "COMPARE_LOOP" ++
-            jsr "COMPARE_EXECUTE" ++
-            addi r2 r2 (to_imm 0) ++
-            brz "COMPARE_END_PERMATURE" ++
-            addi r3 r3 (to_imm (-1)) ++
-        brp "COMPARE_LOOP" ++
+        label "COMPARE_START"           ++
+        st r7 "R7_SAVE"                 ++
+        jsr "CHANGE_FLAG"               ++
+        jsr "ALL_TO_ZERO"               ++
+        label "COMPARE_LOOP" 		++
+            jsr "COMPARE_EXECUTE" 	++
+            addi r2 r2 (to_imm 0) 	++
+            brz "COMPARE_END_PERMATURE"	++
+            addi r3 r3 (to_imm (-1)) 	++
+        brp "COMPARE_LOOP" 		++
 
         jsr "COMPARE_FINISH"
 
     in
     let compare_end_permature =
-        label "COMPARE_END_PERMATURE" ++
-        (*This might be wrong*)
-        negate r3 ++
-        addr r6 r6 r3 ++
-        zero r2 ++
+        label "COMPARE_END_PERMATURE" 	++
+        negate r3 			++
+        addr r6 r6 r3 			++
+        addi r6 r6 (to_imm 1)           ++
+        zero r2 			++
         jsr "COMPARE_FINISH"
 
     in
     let change_flag = 
-        label "CHANGE_FLAG"     ++
-        ld r0 "TO_CHANGE"             ++
-        st r0 "FLAG_SAVE"               ++
+        label "CHANGE_FLAG"     	++
+        ld r2 "TO_CHANGE"             	++
+        st r2 "FLAG_SAVE"               ++
         addi r0 r0 (to_imm 0)           ++
         brnz "COMPARE_REMOVE_SMALLER"   ++
         label "COMPARE_CHECK_EQUAL"     ++
@@ -273,20 +274,18 @@ let compare_routine =
         label "COMPARE_END_CHANGE"      ++
         ret                             ++
         label "COMPARE_REMOVE_SMALLER"  ++
-        ld r1 "N_MASK"                  ++
-        ld r0 "TO_CHANGE"               ++
-        andr r0 r0 r1                   ++
-        st r0 "TO_CHANGE"               ++
-        brnzp "COMPARE_REMOVE_EQUAL"    ++
-
-
+            ld r2 "N_MASK"                  ++
+            ld r0 "TO_CHANGE"               ++
+            andr r0 r0 r2                   ++
+            st r0 "TO_CHANGE"               ++
+            brnzp "COMPARE_CHECK_EQUAL"    ++
 
         label "COMPARE_REMOVE_EQUAL"    ++
-        ld r1 "Z_MASK"                  ++
-        ld r0 "TO_CHANGE"               ++
-        andr r0 r0 r1                   ++
-        st r0 "TO_CHANGE"               ++
-        brnzp "COMPARE_END_CHANGE"      
+            ld r1 "Z_MASK"                  ++
+            ld r0 "TO_CHANGE"               ++
+            andr r0 r0 r1                   ++
+            st r0 "TO_CHANGE"               ++
+            brnzp "COMPARE_END_CHANGE"      
 
     in
     let all_to_zero =
@@ -294,7 +293,6 @@ let compare_routine =
         zero r0 ++
         zero r1 ++
         zero r2 ++
-        zero r3 ++
         ret
 
     in
@@ -302,6 +300,7 @@ let compare_routine =
         label "COMPARE_EXECUTE" ++
         stack_pull_into r1      ++
         stack_pull_into r0      ++
+        dec_stack_pointer       ++
         negate r1               ++
         addr r0 r0 r1           ++
         label "TO_CHANGE"       ++
@@ -322,7 +321,8 @@ let compare_routine =
     let compare_finish = 
         label "COMPARE_FINISH"  ++
         ld r1 "FLAG_SAVE"       ++
-        st r1 "TO_CHANGE"     ++
+        st r1 "TO_CHANGE"       ++
+        inc_stack_pointer       ++
         stack_push_from r2      ++
         ld r7 "R7_SAVE"         ++
         ret
@@ -330,14 +330,26 @@ let compare_routine =
 
     storage ++ compare_start ++ compare_end_permature ++ change_flag ++
     all_to_zero ++ compare_execute ++ compare_finish
-
-
 (* 
    Since 
    (< 7 8 1) is equivalent to (> 1 8 7) then we only need a smaller than function
    (= 7 8 1) is similar to (< 7 8 1), only changes the "Is False" flag
 
 *)
+
+let logical_not = 
+    label "LOGICAL_NOT"        ++
+    stack_pull_into r1         ++
+    addr r1 r1 (to_imm 0)      ++
+    brnz "LOGICAL_NOT_TO_ONE"  ++
+    zero r1                    ++
+    stack_push_from r1         ++
+    ret                        ++
+    label "LOGICAL_NOT_TO_ONE" ++
+    set_val r1 (to_imm 0)      ++
+    stack_push_from r1         ++
+    ret                        
+
 
 
 let all_subroutines =

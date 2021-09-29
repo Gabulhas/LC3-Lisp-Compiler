@@ -8,6 +8,13 @@ let number_to_int value =
     | Number a -> a
     | _ -> raise (Invalid_argument "Arithmetic Function not starting with number")
 
+let rec get_first_number ast =
+    match ast with 
+    | Number a::_ -> Some (Number a)
+    | _::tl -> get_first_number tl
+    | _ -> None
+
+
 let rec optimize ast =
     match ast with
     | LList a -> (
@@ -18,6 +25,8 @@ let rec optimize ast =
     ) 
     | _ -> ast
 
+
+(*Fix: init_accum must be a literal value, can't be a non-constant expression*)
 and optimize_symbol symbol ast =
     let arguments = List.tl ast in
     match symbol with
@@ -26,7 +35,12 @@ and optimize_symbol symbol ast =
     | "*" -> arithm_compact arguments mul 1
     | "/" -> arithm_compact (List.tl arguments) (/) (List.hd arguments |> number_to_int)
     | "%" -> arithm_compact arguments (mod) 1
-    | _ -> arithm_compact arguments (mod) 0
+    | ">" -> value_compare_compact arguments (>)
+    | "<" -> value_compare_compact arguments (<)
+    | ">="-> value_compare_compact arguments (>=)
+    | "<="-> value_compare_compact arguments (<=)
+    | "=" -> value_compare_compact arguments (=)
+    | _ -> ast
 
 and arithm_compact arguments func init_accum =
     let overevaluated = List.map optimize arguments in
@@ -38,6 +52,10 @@ and arithm_compact arguments func init_accum =
 
     in 
     calculate init_accum overevaluated []
+
+and value_compare_compact _ _ =
+    []
+
 
 and get_single_number_if_possible symbol ast =
     let result = optimize_symbol symbol ast in

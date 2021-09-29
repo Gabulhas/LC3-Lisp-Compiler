@@ -15,12 +15,12 @@ let initial_code:asm = (*.ORIG x3000*)
     comment "Register Initialization" ++
     ld r6 "STACK_BOTTOM_POINTER"++
     ld r5 "STACK_BOTTOM_POINTER" ++
-    ld r4 "GLOBAL_DATA_POINTER" ++
+    (*ld r4 "GLOBAL_DATA_POINTER" ++*)
     brnzp "MAIN"                ++
 
     comment "Pointers" ++
-    label "GLOBAL_DATA_POINTER" ++
-    fill_label "GLOBAL_DATA"     ++
+    (*label "GLOBAL_DATA_POINTER" ++
+    fill_label "GLOBAL_DATA"     ++ *)
     label "STACK_BOTTOM_POINTER"++
     fill 65023
 
@@ -135,7 +135,7 @@ and compare_func arguments is_smaller is_equal =
     pre_eval ++
     set_val r0 (to_imm is_smaller)   ++
     set_val r1 (to_imm is_equal)     ++
-    set_val r3 (to_imm n_to_compare) ++
+    set_val r3 (to_imm (n_to_compare - 1)) ++
     jsr "COMPARE_START"
 
 and symbol_generate sym arguments=
@@ -145,12 +145,13 @@ and symbol_generate sym arguments=
     | "*" -> mull_func arguments
     | "/" -> div_func arguments
     | "%" -> modulo_func arguments
-    | ">" -> compare_func (List.rev arguments) 1 0
-    | ">=" -> compare_func (List.rev arguments) 1 1
-    | "<" -> compare_func arguments 1 0
-    | "<=" -> compare_func arguments 1 1
-    | "=" -> compare_func arguments 0 1
-    | "define" -> ""
+    | ">" -> compare_func (List.rev arguments) 0 1
+    | ">="-> compare_func (List.rev arguments) 0 0
+    | "<" -> compare_func arguments 0 1
+    | "<="-> compare_func arguments 0 0
+    | "equal?" | "=" -> compare_func arguments 1 0
+    | "!"| "not" -> jsr "LOGICAL_NOT"
+    | "define"-> ""
     | "print" -> ""
     | _ -> ""
 

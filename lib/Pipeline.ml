@@ -1,4 +1,5 @@
 let debug = true
+let optimize = false
 
 
 let pipeline text = 
