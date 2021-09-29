@@ -23,14 +23,14 @@ Uses my own assembler ([LC3 Assembler](https://github.com/Gabulhas/Garbage-LC3-A
 ## TODO
 Check ([TODO.md](/TODO.md))
 
-
-
   
 ## Features (so far)
 
 - Lisp Parsing
 - Lexing
 - Basic Arithmetic (`+ - / * %`)
+ 
+Basically, for now it's a calculator that doesn't show the result ;) (It puts the result on top of the stack).
 
 
   
